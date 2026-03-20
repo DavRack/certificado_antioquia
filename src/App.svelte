@@ -3,11 +3,13 @@
 
   let nombre = $state('');
   let cedula = $state('');
+  let fechaNacimiento = $state('');
+  let lugarNacimiento = $state('');
   let error = $state('');
 
   function generarCertificado(e: Event) {
     e.preventDefault();
-    if (!nombre.trim() || !cedula.trim()) {
+    if (!nombre.trim() || !cedula.trim() || !fechaNacimiento.trim() || !lugarNacimiento.trim()) {
       error = 'Por favor, completa todos los campos.';
       return;
     }
@@ -36,29 +38,33 @@
     doc.setFont("helvetica", "bold");
     doc.setFontSize(40);
     doc.setTextColor(0, 102, 51);
-    doc.text("CERTIFICADO ANTIOQUIA", 148.5, 50, { align: "center" });
+    doc.text("CERTIFICADO ANTIOQUIA", 148.5, 45, { align: "center" });
 
     // Subtitle
     doc.setFont("helvetica", "normal");
     doc.setFontSize(20);
     doc.setTextColor(50, 50, 50);
-    doc.text("Este certificado se otorga a:", 148.5, 80, { align: "center" });
+    doc.text("Este certificado se otorga a:", 148.5, 75, { align: "center" });
 
     // Name
     doc.setFont("times", "bolditalic");
     doc.setFontSize(35);
     doc.setTextColor(0, 0, 0);
-    doc.text(nombre.toUpperCase(), 148.5, 110, { align: "center" });
+    doc.text(nombre.toUpperCase(), 148.5, 100, { align: "center" });
 
     // Document
     doc.setFont("helvetica", "normal");
     doc.setFontSize(16);
-    doc.text(`Identificado(a) con cédula de ciudadanía No. ${cedula}`, 148.5, 130, { align: "center" });
+    doc.text(`Identificado(a) con cédula de ciudadanía No. ${cedula}`, 148.5, 120, { align: "center" });
+
+    // Birth info
+    doc.setFontSize(14);
+    doc.text(`Nacido(a) el ${fechaNacimiento} en ${lugarNacimiento}`, 148.5, 135, { align: "center" });
 
     // Date
-    const fecha = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
+    const fechaActual = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
     doc.setFontSize(14);
-    doc.text(`Expedido el ${fecha}`, 148.5, 160, { align: "center" });
+    doc.text(`Expedido el ${fechaActual}`, 148.5, 160, { align: "center" });
 
     // Signatures
     doc.setLineWidth(0.5);
@@ -105,6 +111,29 @@
         />
       </div>
 
+      <div class="form-group-row">
+        <div class="form-group">
+          <label for="fechaNacimiento">Fecha de Nacimiento</label>
+          <input 
+            type="date" 
+            id="fechaNacimiento" 
+            bind:value={fechaNacimiento} 
+            required 
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="lugarNacimiento">Lugar de Nacimiento</label>
+          <input 
+            type="text" 
+            id="lugarNacimiento" 
+            bind:value={lugarNacimiento} 
+            placeholder="Ej: Medellín" 
+            required 
+          />
+        </div>
+      </div>
+
       {#if error}
         <p class="error">{error}</p>
       {/if}
@@ -136,7 +165,7 @@
   .card {
     background: #ffffff;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px; /* slightly wider to accommodate two fields side-by-side */
     padding: 2.5rem;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
@@ -160,6 +189,13 @@
 
   .form-group {
     margin-bottom: 1.25rem;
+    width: 100%;
+  }
+
+  .form-group-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
   }
 
   label {
@@ -178,6 +214,10 @@
     font-size: 1rem;
     transition: border-color 0.2s, box-shadow 0.2s;
     box-sizing: border-box;
+  }
+
+  input[type="date"] {
+    font-family: inherit;
   }
 
   input:focus {
@@ -228,6 +268,11 @@
     
     h1 {
       font-size: 1.5rem;
+    }
+    
+    .form-group-row {
+      flex-direction: column;
+      gap: 0;
     }
   }
 </style>
