@@ -19,61 +19,65 @@
     }
     error = '';
 
+    // "letter" (carta) is 215.9 x 279.4 mm
     const doc = new jsPDF({
-      orientation: 'landscape',
+      orientation: 'portrait',
       unit: 'mm',
-      format: 'a4'
+      format: 'letter'
     });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
 
     // Draw diploma border
     doc.setLineWidth(5);
     doc.setDrawColor(0, 102, 51); // Green border for Antioquia
-    doc.rect(10, 10, 277, 190);
+    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
     
     doc.setLineWidth(1);
     doc.setDrawColor(0, 0, 0);
-    doc.rect(15, 15, 267, 180);
+    doc.rect(15, 15, pageWidth - 30, pageHeight - 30);
 
     // Title
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(40);
+    doc.setFontSize(36);
     doc.setTextColor(0, 102, 51);
-    doc.text("CERTIFICADO ANTIOQUIA", 148.5, 45, { align: "center" });
+    doc.text("ORGULLOSAMENTE ANTIOQUEÑO", pageWidth / 2, 60, { align: "center" });
 
     // Subtitle
     doc.setFont("helvetica", "normal");
     doc.setFontSize(20);
     doc.setTextColor(50, 50, 50);
-    doc.text("Este certificado se otorga a:", 148.5, 75, { align: "center" });
+    doc.text("Este certificado se otorga a:", pageWidth / 2, 90, { align: "center" });
 
     // Name
     doc.setFont("times", "bolditalic");
-    doc.setFontSize(35);
+    doc.setFontSize(32);
     doc.setTextColor(0, 0, 0);
-    doc.text(nombre.toUpperCase(), 148.5, 100, { align: "center" });
+    doc.text(nombre.toUpperCase(), pageWidth / 2, 120, { align: "center" });
 
     // Document
     doc.setFont("helvetica", "normal");
     doc.setFontSize(16);
-    doc.text(`Identificado(a) con cédula de ciudadanía No. ${cedula}`, 148.5, 120, { align: "center" });
+    doc.text(`Identificado(a) con cédula de ciudadanía No. ${cedula}`, pageWidth / 2, 140, { align: "center" });
 
     // Birth info
     doc.setFontSize(14);
-    doc.text(`Nacido(a) el ${fechaNacimiento} en ${lugarNacimiento}`, 148.5, 135, { align: "center" });
+    doc.text(`Nacido(a) el ${fechaNacimiento} en ${lugarNacimiento}`, pageWidth / 2, 160, { align: "center" });
 
     // Date
     const fechaActual = new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' });
     doc.setFontSize(14);
-    doc.text(`Expedido el ${fechaActual}`, 148.5, 160, { align: "center" });
+    doc.text(`Expedido el ${fechaActual}`, pageWidth / 2, 190, { align: "center" });
 
     // Signatures
     doc.setLineWidth(0.5);
-    doc.line(70, 180, 130, 180);
+    doc.line(pageWidth / 2 - 50, 240, pageWidth / 2 - 10, 240);
     doc.setFontSize(12);
-    doc.text("Gobernador", 100, 185, { align: "center" });
+    doc.text("Gobernador", pageWidth / 2 - 30, 245, { align: "center" });
 
-    doc.line(170, 180, 230, 180);
-    doc.text("Secretario de Educación", 200, 185, { align: "center" });
+    doc.line(pageWidth / 2 + 10, 240, pageWidth / 2 + 50, 240);
+    doc.text("Secretario de Educación", pageWidth / 2 + 30, 245, { align: "center" });
 
     doc.save(`certificado_antioquia_${cedula}.pdf`);
   }
@@ -81,7 +85,7 @@
 
 <div class="wrapper">
   <main class="card">
-    <h1>Certificado Antioquia</h1>
+    <h1>Orgullosamente antioqueño</h1>
     <p>Completa los datos para generar tu certificado oficial.</p>
 
     <form onsubmit={generarCertificado}>
@@ -165,7 +169,7 @@
   .card {
     background: #ffffff;
     width: 100%;
-    max-width: 500px; /* slightly wider to accommodate two fields side-by-side */
+    max-width: 500px;
     padding: 2.5rem;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
