@@ -42,7 +42,8 @@
     doc.setFont("helvetica", "bold");
     doc.setFontSize(36);
     doc.setTextColor(0, 102, 51);
-    doc.text("ORGULLOSAMENTE ANTIOQUEÑO", pageWidth / 2, 60, { align: "center" });
+    doc.text("ORGULLOSAMENTE", pageWidth / 2, 50, { align: "center" });
+    doc.text("ANTIOQUEÑO", pageWidth / 2, 65, { align: "center" });
 
     // Subtitle
     doc.setFont("helvetica", "normal");
@@ -85,7 +86,7 @@
 
 <div class="wrapper">
   <main class="card">
-    <h1>Orgullosamente antioqueño</h1>
+    <h1>Orgullosamente<br />antioqueño</h1>
     <p>Completa los datos para generar tu certificado oficial.</p>
 
     <form onsubmit={generarCertificado}>
@@ -182,6 +183,7 @@
     font-size: 1.75rem;
     text-align: center;
     font-weight: 700;
+    line-height: 1.1;
   }
 
   p {
